@@ -9,7 +9,8 @@ def main(argv):
 		python main.py fasta.txt
 	"""
 	if(len(argv) < 2):
-		print("Not enough arguments")
+		print("Translates RNA sequences in a FASTA file into an amino acid sequence")
+		print("Usage: python", argv[0], "fasta.txt")
 		return
 	
 	file = open(argv[1], "r")
