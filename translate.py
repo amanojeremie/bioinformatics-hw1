@@ -43,8 +43,8 @@ class AminoAcidSequence:
 		"""
 		str = ""
 		for aminoAcid in self.acidArray:
-			str += aminoAcid[2] + "-"
-		return str[:-1] #Omits the last dash
+			str += aminoAcid[2]
+		return str
 
 def codonToAminoAcid(codon):
 	"""
