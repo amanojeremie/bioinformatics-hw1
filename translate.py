@@ -1,9 +1,9 @@
 """
 	Amino acids are represented as a 4-tuple
 	The first element is the full name of the acid
-	The second element is the short representation of the acid
-	The third element is the letter representation of the acid
-	The fourth element is a list of accepted RNA translations for the acid
+	The second element is the 3-letter representation of the acid
+	The third element is the 1-letter representation of the acid
+	The fourth element is a list of accepted RNA codons for the acid
 """
 AMINO_ACIDS = [
 	("Alanine", "Ala", "A", ["GCU", "GCC", "GCA", "GCG"]),
@@ -29,9 +29,9 @@ AMINO_ACIDS = [
 	("STOP", "STOP", "STOP", ["UAA", "UAG", "UGA"])
 ]
 
-class AcidSequence:
+class AminoAcidSequence:
 	"""
-		Class that represents a translated Acid sequence given from
+		Class that represents a translated Amino Acid sequence given from
 		an RNA sequence.
 	"""
 	def __init__(self, acidArray):
@@ -39,37 +39,38 @@ class AcidSequence:
 
 	def __str__(self):
 		"""
-			Creates a string representation of the sequence using the letter representation
+			Creates a string representation of the amino acid sequence using the 1-letter representation
 		"""
 		str = ""
 		for aminoAcid in self.acidArray:
 			str += aminoAcid[2] + "-"
 		return str[:-1] #Omits the last dash
 
-def tripletToAcid(triplet):
+def codonToAminoAcid(codon):
 	"""
-		Converts a triplet of characters into an amino acid
+		Converts a codon into an amino acid
 	"""
 	for aminoAcid in AMINO_ACIDS:
-		if triplet in aminoAcid[3]:
+		if codon in aminoAcid[3]: #If codon is in the list of accepted codons
 			return aminoAcid
-	print("UNKNOWN:", triplet) #If no match found, print an unkwown warning
+	print("UNKNOWN:", codon) #If no match found, print an unkwown warning
 
 def translate(str):
 	"""
 		Translates an RNA sequence string into an amino acid sequence.
-		Returns an AcidSequence
+		Returns an AminoAcidSequence
 	"""
 
 	if len(str) % 3 != 0: #Sequence length has to be divisible by 3
 		print("Not translatable")
 		return
+
 	translation = []
-	for i in range(0, len(str) // 3): #From 0 to number of triplets
-		triplet = str[i * 3 : i * 3 + 3] #Extracts a triplet from the string
-		acid = tripletToAcid(triplet)
+	for i in range(0, len(str) // 3): #From 0 to number of codons
+		codon = str[i * 3 : i * 3 + 3] #Extracts a codon from the string
+		acid = codonToAminoAcid(codon)
 		if acid != None:
 			translation.append(acid)
 			if acid[0] == "STOP": #If a stop codon is reached, stop translating
 				break
-	return AcidSequence(translation)
+	return AminoAcidSequence(translation)

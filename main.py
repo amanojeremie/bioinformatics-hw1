@@ -20,7 +20,7 @@ def main(argv):
 			sequence = file.readline()[:-1] #Omits the newline character
 			print(name)
 			translation = translate(sequence)
-			print("Length:", len(translation.acidArray))
+			print("Amino Acid Residues:", len(translation.acidArray))
 			print(translation, end="\n\n") #Use two endlines to separate future genes in output
 if __name__ == "__main__":
 	main(sys.argv)
