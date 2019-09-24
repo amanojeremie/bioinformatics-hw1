@@ -36,31 +36,45 @@ hydrophobicity = [
 get the total hydrophobicity given the region length
 print out the regions that have high hydrophobicity
 @param aminoAcid 
-@param regionLen length of the region to look at
+@param minLen minimal length of region
+@param maxLen maximum length of region
 """
-def getHdyroRegion(aminoAcid, regionLen):
-    acid = aminoAcid.split('-') #remove "-"
-    acid.remove('STOP')
+def getHdyroRegion(aminoAcid, minLen, maxLen):
+    acid = aminoAcid[0 : len(aminoAcid) - 4] # remove "stop" codon
+    print(acid)
     results = [] #store potential region
-    for i in range(0, len(acid) - regionLen + 1): #loop through amino acid with given length
-        hydroSum = 0
-        region = acid[i : i + regionLen] #get subregion 
-        for j in range(0, regionLen): #sum up the hydro. 
-            hydroSum += getHydro(region[j])
-        if hydroSum >= 25: # if the sum is greater than a critical value, then it is a transport potein
-            results.append(region) # store subregion
+    resultsIndex = [] #store region index
+    preI = -999
+    preLen = 0
+    for i in range(0, len(acid) - minLen + 1): #loop through amino acid with given length
+        for j in range(minLen, maxLen): #try different length of region: from min to max
+            hydroSum = 0  
+            if((i + j) < len(acid)): #aviod out of bound
+                region = acid[i : i + j] #get subregion     
+                for k in range(0, j ): #sum up the hydro. 
+                    hydroSum += getHydro(region[k])
+                    flag = (i - preI) >= preLen #the start index of second region should at least j away from the start of previous region
+                    if (hydroSum >= 45) and flag: # if the sum is greater than a critical value, then it is a transport potein  
+                        results.append(region) # store subregion
+                        preLen = len(region)
+                        preI = i
+                        index = (i, i + j)
+                        resultsIndex.append(index)
+                        break #once find a high hydro. stop increasing the length of region                    
+                    else:
+                        continue #continue increase the size of region
+    print(resultsIndex, end="\n")
     print(results, end="\n\n") #print subregion. Will decide how to highlight the region
 
 """
 get the individual hydrophobicity
 @param acid individual aminio acid
-@return  kdHydrophobicity by default
+@return  hhHydrophobicity by default
 """
 def getHydro(acid): #get individual hydro. given an acid
     for acidHydro in hydrophobicity:
-        if acid in acidHydro[1]:
-            
-            return acidHydro[2]
+        if acid in acidHydro[1]:            
+            return acidHydro[4]
 
 
 
@@ -84,7 +98,7 @@ def main(argv):
 			print(name)
 			translation = translate(sequence)
             
-			getHdyroRegion(str(translation), 17)
+			getHdyroRegion(str(translation), 17, 22)
            
 			
 if __name__ == "__main__":
