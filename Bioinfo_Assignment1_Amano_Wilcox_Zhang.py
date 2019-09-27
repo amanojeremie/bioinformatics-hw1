@@ -167,7 +167,7 @@ def getHydrophobicRegions(aminoAcid, minLen, maxLen, cutoff, useLHydro=False):
 """
 get the individual hydrophobicity
 @param acid individual amino acid
-@return  hhHydrophobicity by default
+@return  kdhydrophobicity or lHhydrophobicity
 """
 def getHydro(acid, useLHydro): #get individual hydrophobicity given an acid
 	for acidHydro in hydrophobicity:
