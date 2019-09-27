@@ -76,7 +76,7 @@ def translate(str):
 	return AminoAcidSequence(translation)
 
 import os, sys
-from translate import translate
+
 
 if sys.platform.lower() == "win32": #Enables color output in Windows CLIs, not needed for other OSs
 	os.system('color')
